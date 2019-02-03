@@ -1,0 +1,23 @@
+{
+  "name": "node-cms",
+  "version": "1.0.0",
+  "description": "a cms made with node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vehcklox/node-cms.git"
+  },
+  "keywords": [
+    "node",
+    "cms"
+  ],
+  "author": "Adrien Maranville",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vehcklox/node-cms/issues"
+  },
+  "homepage": "https://github.com/vehcklox/node-cms#readme"
+}
