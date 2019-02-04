@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/vehcklox/node-cms/issues"
   },
-  "homepage": "https://github.com/vehcklox/node-cms#readme"
+  "homepage": "https://github.com/vehcklox/node-cms#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
