@@ -1,0 +1,34 @@
+<div class="col-sm-12 col-md-10 offset-md-1">
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Allow Comments</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each posts }}
+            <tr>
+                <td>{{id}}</td>
+                {{#if file}}
+                    <td><img src="/uploads/{{file}}" alt="post banner image" class="img-fluid"></td>
+                {{else}}
+                    <td><img src="/uploads/banner.png" alt="post banner image" class="img-fluid"></td>
+                {{/if}}
+                <td>{{title}}</td>
+                <td>{{status}}</td>
+                <td>{{allowComments}}</td>
+                <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
+                <td>
+                    <form action="/admin/posts/delete/{{id}}?_method=DELETE" method="POST">
+                        <input type="submit" class="btn btn-danger" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
