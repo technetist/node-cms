@@ -7,6 +7,7 @@
             <th>Title</th>
             <th>Status</th>
             <th>Allow Comments</th>
+            <th>Date</th>
         </tr>
         </thead>
         <tbody>
@@ -21,9 +22,11 @@
                 <td>{{title}}</td>
                 <td>{{status}}</td>
                 <td>{{allowComments}}</td>
+                <td>{{generateTime date 'MMMM Do, YYYY'}}</td>
                 <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
                 <td>
                     <form action="/admin/posts/delete/{{id}}?_method=DELETE" method="POST">
+                        <!--TODO: Add a confirmation alert for deleting posts-->
                         <input type="submit" class="btn btn-danger" value="Delete">
                     </form>
                 </td>

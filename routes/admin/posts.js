@@ -58,6 +58,7 @@ router.post('/create', (req, res) => {
     });
 
     newPost.save().then(savedPost => {
+      req.flash('success_message', `Post titled ${savedPost.title} was created successfully!`);
       res.redirect('/admin/posts')
     }).catch(err => console.log((err)));
   }
@@ -72,15 +73,9 @@ router.get('/edit/:id', (req, res) => {
 });
 
 router.put('/edit/:id', (req, res) => {
-  let filename = '';
-  if (!isEmpty(req.files)) {
-    let uploadedFile = req.files.postImage;
-    filename = Date.now() + '-' + uploadedFile.name;
 
-    uploadedFile.mv('./public/uploads/' + filename, (err) => {
-      if (err) throw err;
-    });
-  }
+
+
   Post.findOne({_id: req.params.id}).then(post => {
     let allowComments;
     allowComments = !!req.body.allowComments;
@@ -88,8 +83,19 @@ router.put('/edit/:id', (req, res) => {
     post.allowComments = allowComments;
     post.status = req.body.status;
     post.body = req.body.body;
-    post.file = filename;
+
+    if (!isEmpty(req.files)) {
+      let uploadedFile = req.files.postImage;
+      let filename = Date.now() + '-' + uploadedFile.name;
+      post.file = filename;
+
+      uploadedFile.mv('./public/uploads/' + filename, (err) => {
+        if (err) throw err;
+      });
+    }
+
     post.save().then(updatedPost => {
+      req.flash('success_message', `Post titled ${updatedPost.title} was updated successfully!`);
       res.redirect('/admin/posts/edit/' + req.params.id);
     }).catch(err => console.log((err)));
   });
@@ -100,6 +106,7 @@ router.delete('/delete/:id', (req, res) => {
     fs.unlink(uploadDir + post.file, (err) => {
       if (err) console.log(err);
       post.remove();
+      req.flash('success_message', `Post titled ${post.title} was removed!`);
       res.redirect('/admin/posts');
     });
 

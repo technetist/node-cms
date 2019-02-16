@@ -36,6 +36,7 @@
     "jquery": "^3.3.1",
     "jquery-easing": "0.0.1",
     "method-override": "^3.0.0",
+    "moment": "^2.24.0",
     "mongoose": "^5.4.10",
     "popper.js": "^1.14.7"
   },

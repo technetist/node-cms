@@ -6,7 +6,7 @@
             <input type="text" id="title" name="title" class="form-control" placeholder="Enter Title"
                    value="{{post.title}}" required>
         </div>
-
+<!--TODO: Show image when editing post-->
         <div class="form-group">
             <label for="postImage">Image</label>
             <input type="file" id="postImage" name="postImage" class="form-control-file">
@@ -36,6 +36,6 @@
             <label for="body">Body {{#if errors.body }}<span class="text-danger px-3">{{errors.body}}</span>{{/if}}</label>
             <textarea id="body" name="body" class="form-control" rows="5" required>{{post.body}}</textarea>
         </div>
-        <button class="btn btn-primary" type="submit">Submit</button>
+        <button class="btn btn-primary" type="submit">Edit Post</button>
     </form>
 </div>
