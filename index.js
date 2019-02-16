@@ -8,7 +8,7 @@ const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const {select, generateTime} = require('./helpers/handlebars-helpers');
+const {select, generateTime, condenseText} = require('./helpers/handlebars-helpers');
 
 const home = require('./routes/home/main');
 const admin = require('./routes/admin/main');
@@ -18,17 +18,20 @@ const generate = require('./routes/admin/generate');
 const app = express();
 const port = process.env.PORT || 9999;
 
-mongoose.connect('mongodb://localhost:27017/cms', {useNewUrlParser: true}).then((db)=>{
+mongoose.connect('mongodb://localhost:27017/cms', {useNewUrlParser: true}).then((db) => {
   console.log('mongo connected');
-}).catch(error=>console.log(error));
+}).catch(error => console.log(error));
 
-app.engine('handlebars', exphbs({defaultLayout: 'home', helpers: {select: select, generateTime: generateTime}}));
+app.engine('handlebars', exphbs({
+  defaultLayout: 'home',
+  helpers: {select: select, generateTime: generateTime, condenseText: condenseText}
+}));
 app.set('view engine', 'handlebars');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(upload());
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use(methodOverride('_method'));
@@ -36,12 +39,12 @@ app.use(methodOverride('_method'));
 app.use(session({
   secret: 'AdrienCodes2412',
   resave: true,
-  saveUninitialized:true
+  saveUninitialized: true
 }));
 
 app.use(flash());
 
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
   res.locals.success_message = req.flash('success_message');
   next();
 });

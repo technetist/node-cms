@@ -6,5 +6,13 @@ module.exports = {
   },
   generateTime: function (date, format) {
     return moment(date).format(format);
+  },
+  condenseText: function (text, chars) {
+    if(text.length > chars){
+      return text.substring(0, chars) + ' [...]';
+    } else {
+      return text.substring(0, chars);
+    }
+
   }
 };
