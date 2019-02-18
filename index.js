@@ -14,6 +14,7 @@ const home = require('./routes/home/main');
 const admin = require('./routes/admin/main');
 const posts = require('./routes/admin/posts');
 const generate = require('./routes/admin/generate');
+const categories = require('./routes/admin/categories');
 
 const app = express();
 const port = process.env.PORT || 9999;
@@ -53,6 +54,7 @@ app.use('/', home);
 app.use('/admin', admin);
 app.use('/admin/posts', posts);
 app.use('/admin/generate', generate);
+app.use('/admin/categories', categories);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

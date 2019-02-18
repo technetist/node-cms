@@ -329,6 +329,18 @@ body.sidenav-toggled .navbar-sidenav-tooltip.show {
 .card-register {
   max-width: 40rem; }
 
+.category-table {
+  table-layout: fixed;
+}
+
+.category-action {
+  display: inline-block;
+}
+
+div.form-full-width {
+  width: 100%;
+}
+
 footer.sticky-footer {
   position: absolute;
   right: 0;

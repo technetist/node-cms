@@ -3,13 +3,55 @@ import 'bootstrap';
 import 'chart.js/dist/Chart.min';
 import 'datatables.net/js/jquery.dataTables.min';
 import 'datatables.net-bs4/js/dataTables.bootstrap4.min'
+
 let jQuery = require("jquery-easing");
 
 // Admin scripts
-(function($) {
+(function ($) {
+  let editState = false;
+  $('.categoryEdit').click(function (e) {
+    if (editState) {
+      let id = $(this).closest("tr").children(":first").html();
+      let category = $(this).closest("tr").children(".categoryEditName").children(":first").val();
+      $.ajax({
+        type: 'PUT',
+        url: '/admin/categories/edit/' + id,
+        data: {
+          name: category
+        },
+      }).done((data, status) => {
+        if (status === 'success') {
+          editState = false;
+          $(this).closest("tr").children(".categoryEditName").html(category);
+          let icon = $(this).children(':first');
+          icon.removeClass('fa-check-square');
+          icon.addClass('fa-edit');
+        }
+      });
+    } else {
+      editState = true;
+      let category = $(this).closest("tr").children(".categoryEditName").text();
+      let icon = $(this).children(':first');
+      icon.removeClass('fa-edit');
+      icon.addClass('fa-check-square');
+      $(this).closest("tr").children(".categoryEditName").html("<input class='form-control' type='text' value='" + category + "'>");
+    }
+  });
+
+  $('.categoryDelete').click(function (e) {
+      let id = $(this).closest("tr").children(":first").html();
+    $.ajax({
+      type: 'DELETE',
+      url: '/admin/categories/delete/' + id
+      }).done((data, status) => {
+        if (status === 'success') {
+          $(this).closest("tr").remove();
+        }
+      });
+  });
 
   // Call the dataTables jQuery plugin
-  $(document).ready(function() {
+  $(document).ready(function () {
     $('#dataTable').DataTable();
   });
 
@@ -19,26 +61,26 @@ let jQuery = require("jquery-easing");
     template: '<div class="tooltip navbar-sidenav-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
   })
   // Toggle the side navigation
-  $("#sidenavToggler").click(function(e) {
+  $("#sidenavToggler").click(function (e) {
     e.preventDefault();
     $("body").toggleClass("sidenav-toggled");
     $(".navbar-sidenav .nav-link-collapse").addClass("collapsed");
     $(".navbar-sidenav .sidenav-second-level, .navbar-sidenav .sidenav-third-level").removeClass("show");
   });
   // Force the toggled class to be removed when a collapsible nav link is clicked
-  $(".navbar-sidenav .nav-link-collapse").click(function(e) {
+  $(".navbar-sidenav .nav-link-collapse").click(function (e) {
     e.preventDefault();
     $("body").removeClass("sidenav-toggled");
   });
   // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
-  $('body.fixed-nav .navbar-sidenav, body.fixed-nav .sidenav-toggler, body.fixed-nav .navbar-collapse').on('mousewheel DOMMouseScroll', function(e) {
+  $('body.fixed-nav .navbar-sidenav, body.fixed-nav .sidenav-toggler, body.fixed-nav .navbar-collapse').on('mousewheel DOMMouseScroll', function (e) {
     var e0 = e.originalEvent,
       delta = e0.wheelDelta || -e0.detail;
     this.scrollTop += (delta < 0 ? 1 : -1) * 30;
     e.preventDefault();
   });
   // Scroll to top button appear
-  $(document).scroll(function() {
+  $(document).scroll(function () {
     var scrollDistance = $(this).scrollTop();
     if (scrollDistance > 100) {
       $('.scroll-to-top').fadeIn();
@@ -49,7 +91,7 @@ let jQuery = require("jquery-easing");
   // Configure tooltips globally
   $('[data-toggle="tooltip"]').tooltip()
   // Smooth scrolling using jQuery easing
-  $(document).on('click', 'a.scroll-to-top', function(event) {
+  $(document).on('click', 'a.scroll-to-top', function (event) {
     var $anchor = $(this);
     $('html, body').stop().animate({
       scrollTop: ($($anchor.attr('href')).offset().top)

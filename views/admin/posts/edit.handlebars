@@ -2,26 +2,43 @@
     <h1>Edit Post</h1>
     <form action="?_method=PUT" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="title">Title {{#if errors.title }}<span class="text-danger px-3">{{errors.title}}</span>{{/if}}</label>
+            <label for="title">Title {{#if errors.title }}<span class="text-danger px-3">{{errors.title}}</span>{{/if}}
+            </label>
             <input type="text" id="title" name="title" class="form-control" placeholder="Enter Title"
                    value="{{post.title}}" required>
         </div>
-<!--TODO: Show image when editing post-->
+        <!--TODO: Show image when editing post-->
         <div class="form-group">
             <label for="postImage">Image</label>
             <input type="file" id="postImage" name="postImage" class="form-control-file">
         </div>
 
-        {{#select post.status}}{{/select}}
-        <div class="form-group">
-            <label for="status">Status</label>
-            <select name="status" id="status" class="form-control">
-                {{#select post.status}}
-                    <option value="0">Hidden</option>
-                    <option value="1">Published</option>
-                    <option value="2">Draft</option>
-                {{/select}}
-            </select>
+        <div class="form-inline">
+            <div class="form-group col-sm-6">
+                <div class="d-flex flex-column form-full-width">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-control">
+                        {{#select post.status}}
+                            <option value="0">Hidden</option>
+                            <option value="1">Published</option>
+                            <option value="2">Draft</option>
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <div class="d-flex flex-column form-full-width">
+                    <label for="category">Category</label>
+                    <select name="category" id="category" class="form-control">
+                        {{#select post.category}}
+                            {{#each categories}}
+                                <option value="{{id}}">{{name}}</option>
+                            {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="form-group">
@@ -33,7 +50,8 @@
         </div>
 
         <div class="form-group">
-            <label for="body">Body {{#if errors.body }}<span class="text-danger px-3">{{errors.body}}</span>{{/if}}</label>
+            <label for="body">Body {{#if errors.body }}<span class="text-danger px-3">{{errors.body}}</span>{{/if}}
+            </label>
             <textarea id="body" name="body" class="form-control" rows="5" required>{{post.body}}</textarea>
         </div>
         <button class="btn btn-primary" type="submit">Edit Post</button>

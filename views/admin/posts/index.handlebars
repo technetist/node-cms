@@ -2,10 +2,10 @@
     <table class="table table-bordered">
         <thead class="thead-dark">
         <tr>
-            <th>ID</th>
             <th>Image</th>
             <th>Title</th>
             <th>Status</th>
+            <th>Category</th>
             <th>Allow Comments</th>
             <th>Date</th>
         </tr>
@@ -13,7 +13,6 @@
         <tbody>
         {{#each posts }}
             <tr>
-                <td>{{id}}</td>
                 {{#if file}}
                     <td><img src="/uploads/{{file}}" alt="post banner image" class="img-fluid"></td>
                 {{else}}
@@ -21,6 +20,7 @@
                 {{/if}}
                 <td>{{title}}</td>
                 <td>{{status}}</td>
+                <td>{{category.name}}</td>
                 <td>{{allowComments}}</td>
                 <td>{{generateTime date 'MMMM Do, YYYY'}}</td>
                 <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>

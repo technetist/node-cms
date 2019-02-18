@@ -22,8 +22,13 @@
 
 <!-- Page Content -->
 <div class="container">
+    {{#if success_message}}
+        <div class="row my-4">
+            {{> messages/form-msgs}}
+        </div>
+    {{/if}}
 
-{{{body}}}
+    {{{body}}}
 
 </div>
 <!-- /.container -->

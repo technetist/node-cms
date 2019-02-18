@@ -1,0 +1,38 @@
+<div class="col-sm-12 col-md-4 offset-md-1">
+    <form action="/admin/categories/create" method="post">
+        <div class="form-group">
+            <label for="categoryName">Category Name</label>
+            <input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="Enter Name">
+        </div>
+
+        <input type="submit" class="btn btn-primary" value="Add Category">
+    </form>
+</div>
+<div class="col-sm-12 col-md-5 offset-md-1 py-4 py-md-2">
+    <table class="table table-bordered category-table">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each categories }}
+            <tr>
+                <td class="text-truncate">{{id}}</td>
+                <td class="text-truncate categoryEditName">{{name}}</td>
+                <td>
+                    <form action="javascript:void(0)" class="category-action">
+                        <button type="submit" class="btn btn-info categoryEdit"><i class="far fa-edit"></i></button>
+                    </form>
+                    <form action="javascript:void(0)" class="category-action">
+                        <!--TODO: Add a confirmation alert for deleting categories-->
+                        <button type="submit" class="btn btn-danger categoryDelete"><i class="fa fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+
