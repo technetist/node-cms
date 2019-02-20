@@ -98,6 +98,12 @@ let jQuery = require("jquery-easing");
     }, 1000, 'easeInOutExpo');
     event.preventDefault();
   });
+
+  $('#logout-btn').click(function () {
+    $.post('/logout').done((response) => {
+      window.location = response.redirect;
+    });
+  });
 })(jQuery); // End of use strict
 
 // Chart.js scripts

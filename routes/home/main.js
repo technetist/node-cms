@@ -1,5 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const router = express.Router();
 const Post = require('../../models/Post');
 const Category = require('../../models/Category');
@@ -30,8 +32,48 @@ router.get('/login', (req, res) => {
   res.render('home/login');
 });
 
-router.post('/login', (req, res) => {
-  res.render('home/login');
+passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done) => {
+  User.findOne({email: email}).then((user, err) => {
+    if (err) {
+      return done(null, false, {err});
+    }
+    if (!user) {
+      return done(null, false, {message: 'Incorrect username.'});
+    }
+    user.validPassword(password, function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        if (result) {
+          return done(null, user);
+        } else {
+          return done(null, false, {message: 'Incorrect password.'});
+        }
+      }
+    });
+  });
+}));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true,
+  })(req, res, next)
+});
+router.post('/logout', (req, res) => {
+  req.logOut();
+  let r = { redirect: "/" };
+  return res.json(r);
 });
 
 router.get('/register', (req, res) => {
@@ -58,11 +100,11 @@ router.post('/register', (req, res) => {
   if (req.body.password !== req.body.passwordConfirm) {
     errors['passwordMatch'] = "Your passwords don't match.";
   }
-  User.findOne({email: req.body.email}).then((user)=>{
-    if(user) {
+  User.findOne({email: req.body.email}).then((user) => {
+    if (user) {
       errors['emailExists'] = "That email is already registered.";
     }
-  }).catch(err=>console.log(err));
+  }).catch(err => console.log(err));
 
   if (Object.keys(errors).length > 0) {
     res.render('home/register', {
@@ -79,7 +121,7 @@ router.post('/register', (req, res) => {
       password: req.body.password
     });
 
-    bcrypt.genSalt(10, (err, salt)=>{
+    bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
         newUser.password = hash;
         newUser.save().then(savedUser => {
@@ -88,8 +130,6 @@ router.post('/register', (req, res) => {
         }).catch(err => console.log((err)));
       });
     });
-
-
   }
 
 });

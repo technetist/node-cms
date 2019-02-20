@@ -7,6 +7,8 @@ const methodOverride = require('method-override');
 const upload = require('express-fileupload');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport');
+const {mongoDbUrl} = require('./config/database');
 
 const {select, generateTime, condenseText} = require('./helpers/handlebars-helpers');
 
@@ -19,9 +21,27 @@ const categories = require('./routes/admin/categories');
 const app = express();
 const port = process.env.PORT || 9999;
 
-mongoose.connect('mongodb://localhost:27017/cms', {useNewUrlParser: true}).then((db) => {
+mongoose.connect(mongoDbUrl, {useNewUrlParser: true}).then((db) => {
   console.log('mongo connected');
 }).catch(error => console.log(error));
+
+
+app.use(session({
+  secret: 'AdrienCodes2412',
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  res.locals.success_message = req.flash('success_message');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'home',
@@ -36,19 +56,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use(methodOverride('_method'));
-
-app.use(session({
-  secret: 'AdrienCodes2412',
-  resave: true,
-  saveUninitialized: true
-}));
-
-app.use(flash());
-
-app.use((req, res, next) => {
-  res.locals.success_message = req.flash('success_message');
-  next();
-});
 
 app.use('/', home);
 app.use('/admin', admin);
