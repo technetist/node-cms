@@ -1,0 +1,29 @@
+<div class="col-sm-12">
+    <table class="table table-bordered category-table">
+        <thead class="thead-dark">
+        <tr>
+            <th>User</th>
+            <th>Body</th>
+            <th>Date</th>
+            <th>Approve</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each comments }}
+            <tr>
+                <td class="text-truncate">{{user.firstName}}</td>
+                <td class="text-truncate">{{body}}</td>
+                <td class="text-truncate">{{generateTime date 'MM/DD/YYYY'}}</td>
+                <td><input type="checkbox" name="approve" data-comment-id="{{id}}" data-state="{{approval}}"></td>
+                <td>
+                    <form action="/admin/comments/{{id}}?_method=DELETE" method="post" class="comment-action">
+                        <!--TODO: Add a confirmation alert for deleting comments-->
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+

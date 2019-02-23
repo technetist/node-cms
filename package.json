@@ -25,6 +25,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.2.1",
+    "bootstrap-switch": "^3.3.4",
     "chart.js": "^2.7.3",
     "connect-flash": "^0.1.1",
     "datatables.net": "^1.10.19",
@@ -41,7 +42,8 @@
     "mongoose": "^5.4.10",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "popper.js": "^1.14.7"
+    "popper.js": "^1.14.7",
+    "toastr": "^2.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

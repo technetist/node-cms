@@ -13,6 +13,8 @@ const {mongoDbUrl} = require('./config/database');
 const {select, generateTime, condenseText} = require('./helpers/handlebars-helpers');
 
 const home = require('./routes/home/main');
+const comments = require('./routes/home/comments');
+const adminComments = require('./routes/admin/comments');
 const admin = require('./routes/admin/main');
 const posts = require('./routes/admin/posts');
 const generate = require('./routes/admin/generate');
@@ -37,7 +39,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-  res.locals.user = req.user || null;
+  res.locals.loggedInUser = req.user || null;
   res.locals.success_message = req.flash('success_message');
   res.locals.error = req.flash('error');
   next();
@@ -58,10 +60,12 @@ app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 
 app.use('/', home);
+app.use('/comments', comments);
 app.use('/admin', admin);
 app.use('/admin/posts', posts);
 app.use('/admin/generate', generate);
 app.use('/admin/categories', categories);
+app.use('/admin/comments', adminComments);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

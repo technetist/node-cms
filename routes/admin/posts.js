@@ -55,6 +55,7 @@ router.post('/create', (req, res) => {
     let allowComments;
     allowComments = !!req.body.allowComments;
     const newPost = new Post({
+      user: req.user.id,
       title: req.body.title,
       status: req.body.status,
       allowComments: allowComments,
@@ -70,7 +71,7 @@ router.post('/create', (req, res) => {
   }
 });
 
-router.get('/edit/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   Post.findOne({_id: req.params.id}).then(post => {
     Category.find({}).then(categories=> {
       res.render('admin/posts/edit', {post: post, categories: categories});
@@ -82,11 +83,12 @@ router.get('/edit/:id', (req, res) => {
   });
 });
 
-router.put('/edit/:id', (req, res) => {
+router.put('/:id', (req, res) => {
 
   Post.findOne({_id: req.params.id}).then(post => {
     let allowComments;
     allowComments = !!req.body.allowComments;
+    post.user = req.user.id;
     post.title = req.body.title;
     post.allowComments = allowComments;
     post.status = req.body.status;
@@ -110,9 +112,16 @@ router.put('/edit/:id', (req, res) => {
   });
 });
 
-router.delete('/delete/:id', (req, res) => {
-  Post.findOne({_id: req.params.id}).then(post => {
+router.delete('/:id', (req, res) => {
+  Post.findOne({_id: req.params.id})
+    .populate('comments')
+    .then(post => {
     fs.unlink(uploadDir + post.file, (err) => {
+      if(!post.comments.length < 1) {
+        post.comments.forEach(comment=>{
+          comment.remove();
+        });
+      }
       if (err) console.log(err);
       post.remove();
       req.flash('success_message', `Post titled ${post.title} was removed!`);

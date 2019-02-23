@@ -23,9 +23,9 @@
                 <td>{{category.name}}</td>
                 <td>{{allowComments}}</td>
                 <td>{{generateTime date 'MMMM Do, YYYY'}}</td>
-                <td><a href="/admin/posts/edit/{{id}}" class="btn btn-info">Edit</a></td>
+                <td><a href="/admin/posts/{{id}}" class="btn btn-info">Edit</a></td>
                 <td>
-                    <form action="/admin/posts/delete/{{id}}?_method=DELETE" method="POST">
+                    <form action="/admin/posts/{{id}}?_method=DELETE" method="POST">
                         <!--TODO: Add a confirmation alert for deleting posts-->
                         <input type="submit" class="btn btn-danger" value="Delete">
                     </form>
