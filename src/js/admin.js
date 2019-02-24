@@ -1,9 +1,11 @@
 import "../scss/admin/main.scss";
 import 'bootstrap';
 import 'bootstrap-switch';
-import 'chart.js/dist/Chart.min';
+
+import 'chart.js/dist/Chart.bundle.min';
 import 'datatables.net/js/jquery.dataTables.min';
 import 'datatables.net-bs4/js/dataTables.bootstrap4.min'
+
 const toastr = require('toastr');
 let jQuery = require("jquery-easing");
 
@@ -42,15 +44,15 @@ let windowLoc;
   });
 
   $('.categoryDelete').click(function (e) {
-      let id = $(this).closest("tr").children(":first").html();
+    let id = $(this).closest("tr").children(":first").html();
     $.ajax({
       type: 'DELETE',
       url: '/admin/categories/delete/' + id
-      }).done((data, status) => {
-        if (status === 'success') {
-          $(this).closest("tr").remove();
-        }
-      });
+    }).done((data, status) => {
+      if (status === 'success') {
+        $(this).closest("tr").remove();
+      }
+    });
   });
 
   // Call the dataTables jQuery plugin
@@ -103,7 +105,7 @@ let windowLoc;
   });
   let approvalSwitch = $("[name='approve']");
   approvalSwitch.bootstrapSwitch('state', approvalSwitch.data('state'));
-  approvalSwitch.on('switchChange.bootstrapSwitch', (e, data)=>{
+  approvalSwitch.on('switchChange.bootstrapSwitch', (e, data) => {
     $.ajax({
       type: 'PATCH',
       url: '/admin/comments/' + approvalSwitch.data('comment-id'),
@@ -124,18 +126,34 @@ let windowLoc;
 })(jQuery); // End of use strict
 
 // Chart.js scripts
-if(windowLoc == '/admin') {
+if (windowLoc == '/admin') {
+  // console.log(JSON.parse(userRegistrations));
 // -- Set new default font family and font color to mimic Bootstrap's default styling
   Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
   Chart.defaults.global.defaultFontColor = '#292b2c';
 // -- Area Chart Example
-  var ctx = document.getElementById("myAreaChart");
-  var myLineChart = new Chart(ctx, {
+  var ctx = document.getElementById("usersChart");
+
+  let data = jQuery.parseJSON(userRegistrations);
+  let count = data.length;
+  let counter = 0;
+  let LabelResult = [];
+  let DataResult = [];
+  // LabelResult[0] = '02/01/2019';
+  // DataResult[0] = 0;
+  while (count > 0) {
+    LabelResult[counter] = data[counter]._id;
+    DataResult[counter] = data[counter].count;
+    counter++;
+    count--;
+  }
+
+  var usersChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+      labels: LabelResult,
       datasets: [{
-        label: "Sessions",
+        label: "Users",
         lineTension: 0.3,
         backgroundColor: "rgba(2,117,216,0.2)",
         borderColor: "rgba(2,117,216,1)",
@@ -146,27 +164,30 @@ if(windowLoc == '/admin') {
         pointHoverBackgroundColor: "rgba(2,117,216,1)",
         pointHitRadius: 20,
         pointBorderWidth: 2,
-        data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
+        data: DataResult,
       }],
     },
     options: {
       scales: {
         xAxes: [{
+          type: 'time',
           time: {
-            unit: 'date'
+            unit: 'day',
+            tooltipFormat: 'll',
+            displayFormats: {
+              'day': 'MMM DD',
+            }
           },
           gridLines: {
             display: false
           },
-          ticks: {
-            maxTicksLimit: 7
-          }
         }],
         yAxes: [{
           ticks: {
+            beginAtZero: true,
             min: 0,
-            max: 40000,
-            maxTicksLimit: 5
+            maxTicksLimit: 10,
+            fixedStepSize: 1
           },
           gridLines: {
             color: "rgba(0, 0, 0, .125)",
@@ -178,25 +199,24 @@ if(windowLoc == '/admin') {
       }
     }
   });
-// -- Bar Chart Example
-  var ctx = document.getElementById("myBarChart");
-  var myLineChart = new Chart(ctx, {
+
+  var ctx = document.getElementById("countsChart");
+  var countsChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ["January", "February", "March", "April", "May", "June"],
+      labels: ["Posts", "Categories", "Users", "Comments"],
       datasets: [{
-        label: "Revenue",
+        label: "Count",
         backgroundColor: "rgba(2,117,216,1)",
         borderColor: "rgba(2,117,216,1)",
-        data: [4215, 5312, 6251, 7841, 9821, 14984],
+        data: [postCount, categoryCount, userCount, commentCount],
       }],
     },
     options: {
       scales: {
         xAxes: [{
-          time: {
-            unit: 'month'
-          },
+          type: 'category',
+          labels: ["Posts", "Categories", "Users", "Comments"],
           gridLines: {
             display: false
           },
@@ -206,8 +226,8 @@ if(windowLoc == '/admin') {
         }],
         yAxes: [{
           ticks: {
+            beginAtZero: true,
             min: 0,
-            max: 15000,
             maxTicksLimit: 5
           },
           gridLines: {
@@ -220,18 +240,7 @@ if(windowLoc == '/admin') {
       }
     }
   });
-// -- Pie Chart Example
-  var ctx = document.getElementById("myPieChart");
-  var myPieChart = new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: ["Blue", "Red", "Yellow", "Green"],
-      datasets: [{
-        data: [12.21, 15.58, 11.25, 8.32],
-        backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
-      }],
-    },
-  });
+  let userComments = jQuery.parseJSON(comments);
 }
 
 

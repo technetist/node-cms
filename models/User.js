@@ -18,6 +18,10 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  joined: {
+    type: Date,
+    default: Date.now(),
   }
 });
 

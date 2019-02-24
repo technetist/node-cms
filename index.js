@@ -10,7 +10,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const {mongoDbUrl} = require('./config/database');
 
-const {select, generateTime, condenseText} = require('./helpers/handlebars-helpers');
+const {select, generateTime, condenseText, toJSON} = require('./helpers/handlebars-helpers');
 
 const home = require('./routes/home/main');
 const comments = require('./routes/home/comments');
@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 
 app.engine('handlebars', exphbs({
   defaultLayout: 'home',
-  helpers: {select: select, generateTime: generateTime, condenseText: condenseText}
+  helpers: {select: select, generateTime: generateTime, condenseText: condenseText, toJSON: toJSON}
 }));
 app.set('view engine', 'handlebars');
 app.use(express.static(path.join(__dirname, 'public')));

@@ -115,6 +115,7 @@ router.post('/register', (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
+      joined: Date.now()
     });
   } else {
     const newUser = new User({

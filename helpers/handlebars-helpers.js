@@ -13,6 +13,8 @@ module.exports = {
     } else {
       return text.substring(0, chars);
     }
-
+  },
+  toJSON: function (obj) {
+    return JSON.stringify(obj, null, 3);
   }
 };
