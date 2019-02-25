@@ -14,7 +14,7 @@
                 <td class="text-truncate">{{user.firstName}}</td>
                 <td class="text-truncate">{{body}}</td>
                 <td class="text-truncate">{{generateTime date 'MM/DD/YYYY'}}</td>
-                <td><input type="checkbox" name="approve" data-comment-id="{{id}}" data-state="{{approval}}"></td>
+            <td><input type="checkbox" name="approve" data-comment-id="{{id}}" data-state="{{approval}}" {{#if approval}}checked{{/if}}></td>
                 <td>
                     <form action="/admin/comments/{{id}}?_method=DELETE" method="post" class="comment-action">
                         <!--TODO: Add a confirmation alert for deleting comments-->

@@ -104,11 +104,12 @@ let windowLoc;
     event.preventDefault();
   });
   let approvalSwitch = $("[name='approve']");
-  approvalSwitch.bootstrapSwitch('state', approvalSwitch.data('state'));
+  approvalSwitch.bootstrapSwitch();
   approvalSwitch.on('switchChange.bootstrapSwitch', (e, data) => {
+    let _this = $(e.currentTarget);
     $.ajax({
       type: 'PATCH',
-      url: '/admin/comments/' + approvalSwitch.data('comment-id'),
+      url: '/admin/comments/' + _this.data('comment-id'),
       data: {
         approveComment: data
       },
