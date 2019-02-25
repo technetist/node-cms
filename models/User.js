@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
+const random = require('mongoose-simple-random');
 
 const UserSchema = new Schema({
   firstName: {
@@ -31,5 +32,7 @@ UserSchema.methods.validPassword = function (password,cb) {
     cb(null, matched);
   });
 };
+
+UserSchema.plugin(random);
 
 module.exports = mongoose.model('users', UserSchema);

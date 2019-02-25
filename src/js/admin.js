@@ -240,7 +240,6 @@ if (windowLoc == '/admin') {
       }
     }
   });
-  let userComments = jQuery.parseJSON(comments);
 }
 
 

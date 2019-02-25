@@ -20,8 +20,8 @@ router.get('/', (req, res) => {
   }).catch(err => console.log(err));
 });
 
-router.get('/post/:id', (req, res) => {
-  Post.findOne({_id: req.params.id})
+router.get('/post/:slug', (req, res) => {
+  Post.findOne({slug: req.params.slug})
     .populate({path: 'comments', match: {approval: true}, populate:{path: 'user', model:'users'}})
     .populate('user')
     .then(post => {

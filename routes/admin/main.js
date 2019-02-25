@@ -27,7 +27,10 @@ router.get('/', userAuthenticated, (req, res) => {
                   _id: "$joined",
                   count: {$sum: 1}
                 }
-              }
+              },
+                {
+                  $sort: {_id: 1}
+                }
               ];
               User.aggregate(aggregatorOpts).then(userRegistrations => {
                 res.render('admin/dashboard', {

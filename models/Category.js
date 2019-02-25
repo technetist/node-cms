@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const random = require('mongoose-simple-random');
 
 const CategorySchema = new Schema({
   name: {
@@ -7,5 +8,7 @@ const CategorySchema = new Schema({
     required: true,
   }
 });
+
+CategorySchema.plugin(random);
 
 module.exports = mongoose.model('categories', CategorySchema);

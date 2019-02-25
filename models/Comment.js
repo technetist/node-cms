@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const random = require('mongoose-simple-random');
 
 const CommentSchema = new Schema({
   user: {
@@ -31,5 +32,7 @@ CommentSchema
   if (this["_created"]) return this["_created"];
   return this["_created"] = this._id.getTimestamp();
 });
+
+CommentSchema.plugin(random);
 
 module.exports = mongoose.model('comments', CommentSchema);

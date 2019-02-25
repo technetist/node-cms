@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const UrlSlugs = require('mongoose-url-slugs');
+const random = require('mongoose-simple-random');
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
@@ -36,7 +38,13 @@ const PostSchema = new Schema({
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'comments'
-  }]
+  }],
+  slug: {
+    type: String,
+  }
 });
+
+PostSchema.plugin(UrlSlugs('title', {field: 'slug'}));
+PostSchema.plugin(random);
 
 module.exports = mongoose.model('posts', PostSchema);

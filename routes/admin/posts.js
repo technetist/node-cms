@@ -84,7 +84,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-
   Post.findOne({_id: req.params.id}).then(post => {
     let allowComments;
     allowComments = !!req.body.allowComments;
@@ -107,7 +106,7 @@ router.put('/:id', (req, res) => {
 
     post.save().then(updatedPost => {
       req.flash('success_message', `Post titled ${updatedPost.title} was updated successfully!`);
-      res.redirect('/admin/posts/edit/' + req.params.id);
+      res.redirect('/admin/posts/' + updatedPost._id);
     }).catch(err => console.log((err)));
   });
 });
