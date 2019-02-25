@@ -13,22 +13,35 @@ router.all('/*', (req, res, next) => {
 });
 
 router.get('/', (req, res) => {
-  Post.find({}).then(posts => {
-    Category.find({}).then(categories => {
-      res.render('home/index', {posts: posts, categories: categories});
+  const perPage = 10;
+  const page = req.query.page || 1;
+
+  Post.find({})
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
+    .then(posts => {
+      Post.count().then(postCount => {
+        Category.find({}).then(categories => {
+          res.render('home/index', {
+            posts: posts,
+            categories: categories,
+            current: parseInt(page),
+            pages: Math.ceil(postCount / perPage)
+          });
+        }).catch(err => console.log(err));
+      }).catch(err => console.log(err));
     }).catch(err => console.log(err));
-  }).catch(err => console.log(err));
 });
 
 router.get('/post/:slug', (req, res) => {
   Post.findOne({slug: req.params.slug})
-    .populate({path: 'comments', match: {approval: true}, populate:{path: 'user', model:'users'}})
+    .populate({path: 'comments', match: {approval: true}, populate: {path: 'user', model: 'users'}})
     .populate('user')
     .then(post => {
-    Category.find({}).then(categories => {
-      res.render('home/post', {post: post, categories: categories});
+      Category.find({}).then(categories => {
+        res.render('home/post', {post: post, categories: categories});
+      }).catch(err => console.log(err));
     }).catch(err => console.log(err));
-  }).catch(err => console.log(err));
 });
 
 router.get('/login', (req, res) => {
@@ -57,12 +70,12 @@ passport.use(new LocalStrategy({usernameField: 'email'}, (email, password, done)
   });
 }));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
     done(err, user);
   });
 });
@@ -75,7 +88,7 @@ router.post('/login', (req, res, next) => {
 });
 router.post('/logout', (req, res) => {
   req.logOut();
-  let r = { redirect: "/" };
+  let r = {redirect: "/"};
   return res.json(r);
 });
 
